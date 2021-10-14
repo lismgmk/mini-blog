@@ -1,8 +1,8 @@
 import React from "react";
+import {MainLayout} from "../../layouts/MainLayout";
 import {Box, Button, Card, Grid} from "@mui/material";
 import {useRouter} from "next/router";
-import BlogList from "../Components/BlogList";
-import {MainLayout} from "../layouts/MainLayout";
+import BlogList from "../../Components/BlogList";
 
 const blogs = [
     {name: 'blog1', id: 1},
