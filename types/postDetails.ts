@@ -1,6 +1,6 @@
 
-export interface IPosts {
-    postDetails: IPostDetails
+export interface IOnePost {
+    postDetails: IPostDetails | null
 }
 
 export interface IPostDetails {
@@ -28,3 +28,7 @@ interface CreateCommentAction {
     type: PostDetailsActionTypes.CREATE_COMMENT,
     payload: IComments
 }
+
+export type OnePostAction =
+    | FetchDetailsPostAction
+    | CreateCommentAction

@@ -5,23 +5,27 @@ import {MainLayout} from "../layouts/MainLayout";
 import {IBlog} from "../types/blog";
 import IconButton from "@mui/material/IconButton";
 import {Delete, PlusOne} from "@mui/icons-material";
+import {IPost} from "../types/posts";
 
 interface BlogItemProps {
-    blog: IBlog;
+    post: IPost;
     active?: boolean
 }
 
-const BlogItem: React.FC<BlogItemProps> = ({blog, active = false}) => {
+const BlogItem: React.FC<BlogItemProps> = ({post, active = false}) => {
 
     const router = useRouter()
 
     return (
         <>
-            <Card onClick={() => router.push('/blogs/' + blog.id)}>
+            <Card onClick={() => router.push('/blogs/' + post.id)}>
                 <Box m={3}>
-                    {blog.name}
+                    {post.title}
                 </Box>
-                <img width={70} height={70} src={blog.name}/>
+                <img width={70} height={70} src={''}/>
+                <Box m={3}>
+                    {post.body}
+                </Box>
 
             </Card>
 

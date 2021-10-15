@@ -4,27 +4,26 @@ import {useRouter} from "next/router";
 import {MainLayout} from "../layouts/MainLayout";
 import {IBlog} from "../types/blog";
 import BlogItem from "./BlogItem";
+import {IPost} from "../types/posts";
 
 interface BlogListProps {
-    blogs: IBlog[]
+    posts: IPost[]
 }
 
-const BlogList: React.FC<BlogListProps> = ({blogs}) => {
+const BlogList: React.FC<BlogListProps> = ({posts}) => {
 
     return (
         <>
                 <Grid container direction={'column'}>
 
                         <Box p={3}>
-                            {blogs.map(blog=>
+                            {posts.map(blog=>
                                 <Box p={3}>
-                                    <BlogItem key={blog.id} blog={blog}/>
+                                    <BlogItem key={blog.id} post={blog}/>
                                 </Box>
 
                             )}
                         </Box>
-
-
                 </Grid>
         </>
     );

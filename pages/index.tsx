@@ -3,17 +3,22 @@ import {Box, Button, Card, Grid} from "@mui/material";
 import {useRouter} from "next/router";
 import BlogList from "../Components/BlogList";
 import {MainLayout} from "../layouts/MainLayout";
-
-const blogs = [
-    {name: 'blog1', id: 1},
-    {name: 'blog2', id: 2},
-    {name: 'blog3', id: 3},
-    {name: 'blog4', id: 4},
-]
+import {NextThunkDispatch, wrapper} from "../store";
+import {fetchPosts} from "../store/action-creaters/postsThunk";
+import {useTypedSelector} from "../hooks/useTypedSelector";
+//
+// const blogs = [
+//     {name: 'blog1', id: 1},
+//     {name: 'blog2', id: 2},
+//     {name: 'blog3', id: 3},
+//     {name: 'blog4', id: 4},
+// ]
 
 const Index = () => {
 
     const router = useRouter()
+
+    const posts = useTypedSelector(store => store.posts.posts)
 
     return (
         <>
@@ -26,7 +31,7 @@ const Index = () => {
                                 <Button onClick={() => router.push('blogs/create')}>Add</Button>
                             </Grid>
                         </Box>
-                        <BlogList blogs={blogs}/>
+                        <BlogList posts={posts}/>
                     </Card>
                 </Grid>
             </MainLayout>
@@ -35,3 +40,9 @@ const Index = () => {
 };
 
 export default Index;
+
+export const getServerSideProps = wrapper.getServerSideProps(async ({store}) => {
+    const dispatch = store.dispatch as NextThunkDispatch
+    await dispatch(await fetchPosts())
+})
+

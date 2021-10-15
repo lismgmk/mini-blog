@@ -1,6 +1,5 @@
-
 export interface IPosts {
-    posts: IPost[],
+    posts: IPost[] | null
 }
 
 export interface IPost {
@@ -28,10 +27,17 @@ interface CreatePostAction {
 
 interface DeletePostAction {
     type: PostsActionTypes.DELETE_POST,
-    id: string
+    id: number
 }
+
 interface UpdatePostAction {
     type: PostsActionTypes.UPDATE_POST,
     payload: IPost,
-    id: string
+    id: number
 }
+
+export type PostsAction =
+    | FetchPostsAction
+    | CreatePostAction
+    | DeletePostAction
+    | UpdatePostAction
