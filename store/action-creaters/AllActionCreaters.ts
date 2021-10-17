@@ -26,11 +26,10 @@ export const UpdatePost = (id: number, payload: IPost): PostsAction => {
     return {type: PostsActionTypes.UPDATE_POST, id, payload}
 }
 
-export type ActionCreators =
-| typeof FetchDetailsPost
-| typeof CreateComment
-| typeof CreatePost
-| typeof DeletePost
-| typeof UpdatePost
+export const ActionCreators =
+FetchDetailsPost
+&& CreateComment
+&& CreatePost
+&& DeletePost &&UpdatePost
 
 

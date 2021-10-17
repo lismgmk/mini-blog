@@ -3,16 +3,11 @@ import {Box, Button, Card, Grid} from "@mui/material";
 import {useRouter} from "next/router";
 import BlogList from "../Components/BlogList";
 import {MainLayout} from "../layouts/MainLayout";
-import {NextThunkDispatch, wrapper} from "../store";
 import {fetchPosts} from "../store/action-creaters/postsThunk";
 import {useTypedSelector} from "../hooks/useTypedSelector";
-//
-// const blogs = [
-//     {name: 'blog1', id: 1},
-//     {name: 'blog2', id: 2},
-//     {name: 'blog3', id: 3},
-//     {name: 'blog4', id: 4},
-// ]
+import {NextThunkDispatch, wrapper} from "../store/redusers";
+import {GetServerSideProps} from "next";
+
 
 const Index = () => {
 
@@ -39,10 +34,19 @@ const Index = () => {
     );
 };
 
-export default Index;
 
-export const getServerSideProps = wrapper.getServerSideProps(async ({store}) => {
+
+// export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps( (store) =>
+//     async ({store})=> {
+//         const dispatch = store.dispatch as NextThunkDispatch
+//        const props = await dispatch(await fetchPosts())
+// return props
+// }
+// )
+
+Index.getInitialProps = wrapper.getInitialPageProps(store => async({pathname, req, res}) => {
     const dispatch = store.dispatch as NextThunkDispatch
     await dispatch(await fetchPosts())
-})
+});
 
+export default Index;

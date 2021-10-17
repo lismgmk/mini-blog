@@ -2,7 +2,6 @@ import React from "react";
 import {Box, Button, Card, Grid} from "@mui/material";
 import {useRouter} from "next/router";
 import {MainLayout} from "../layouts/MainLayout";
-import {IBlog} from "../types/blog";
 import IconButton from "@mui/material/IconButton";
 import {Delete, PlusOne} from "@mui/icons-material";
 import {IPost} from "../types/posts";
@@ -41,3 +40,4 @@ const BlogItem: React.FC<BlogItemProps> = ({post, active = false}) => {
 };
 
 export default BlogItem;
+

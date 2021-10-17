@@ -1,7 +1,8 @@
-import {combineReducers} from "redux";
-import {HYDRATE} from "next-redux-wrapper";
+import {AnyAction, applyMiddleware, combineReducers, createStore, Store} from "redux";
+import {Context, createWrapper, HYDRATE, MakeStore} from "next-redux-wrapper";
 import {OnePostReducer} from "./onePostReducer";
 import {postsReducer} from "./postsReducer";
+import thunk, {ThunkDispatch} from "redux-thunk";
 
 
 const rootReducer = combineReducers({
@@ -9,7 +10,7 @@ const rootReducer = combineReducers({
     onePost: OnePostReducer
 })
 
-export const reducer = (state, action) => {
+const reducer = (state, action) => {
     if (action.type === HYDRATE) {
         const nextState = {
             ...state, // use previous state
@@ -22,4 +23,11 @@ export const reducer = (state, action) => {
     }
 }
 
+
 export type RootState = ReturnType<typeof rootReducer>
+
+const makeStore = (context: Context) => createStore(reducer, applyMiddleware(thunk));
+
+export const wrapper = createWrapper<Store<RootState>>(makeStore, {debug: true});
+
+export type NextThunkDispatch = ThunkDispatch<RootState, void, AnyAction>

@@ -1,31 +1,45 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {MainLayout} from "../../layouts/MainLayout";
 import {Box, Button, Card, Grid, TextField} from "@mui/material";
 import {useRouter} from "next/router";
 import BlogList from "../../Components/BlogList";
-import {IBlog} from "../../types/blog";
+import {NextThunkDispatch, wrapper} from "../../store/redusers";
+import {fetchPost, fetchPosts} from "../../store/action-creaters/postsThunk";
+import Index from "../index";
+import {GetServerSideProps} from "next";
+import {useDispatch} from "react-redux";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+import axios from "axios";
+import {nanoid} from "nanoid";
+import {useInput} from "../../hooks/useInput";
 
 
-const BlogPage = () => {
+const BlogPage = ({post}) => {
 
-    const blog: IBlog = {name: 'blog1', id: 1, comments: ['good blog', 'bad vlog']}
+const postComment = useInput('')
+    const [newComment, setNewComment] = useState(post)
+    const addComment = async ()=>{
+        try {
+            const response = await axios.post('https://simple-blog-api.crew.red/comments', {
+                "postId": post.id,
+                "body": postComment.value
+            })
+            setNewComment({...post, comments: [...post.comments, response.data]})
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     const router = useRouter()
-
     return (
         <MainLayout>
             <Button variant={'outlined'}
 
-                    onClick={() => router.push('/blogs/')}>All blogs</Button>
+                    onClick={() => router.push('/')}>All blogs</Button>
             <Grid container>
-                <img src={blog.name} alt='' width={200} height={200}/>
-                <div>
-                    <h1>name blog {blog.name}</h1>
-                    <h1>id blod {blog.id}</h1>
-                    <h1>{blog.name}</h1>
-                </div>
-                <h1>Title</h1>
-                <p>Loream text</p>
+                {/*<img src={post.id} alt='' width={200} height={200}/>*/}
+                    <h1>name blog {post && newComment.title}</h1>
+                <p>{post && newComment.body}</p>
 
                 <h1>Comments</h1>
                 <Grid container>
@@ -38,15 +52,15 @@ const BlogPage = () => {
                         fullWidth
                         multiline
                         rows={4}
+                        {...postComment}
                     />
-                    <Button>Send</Button>
+                    <Button onClick={addComment}>Send</Button>
                 </Grid>
                 <div>
                     {
-                        blog.comments.map(comment=>
-                        <div>
-                            <div>Name</div>
-                            <>Coments {comment}</>
+                        newComment.comments && post.comments.map(comment=>
+                        <div key={nanoid()}>
+                            {comment.body}
                         </div>)
                     }
                 </div>
@@ -57,3 +71,12 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
+    const response =  await axios.get('https://simple-blog-api.crew.red/posts/' + params.id)
+    return {
+        props: {
+            post: response.data
+        }
+    }
+}

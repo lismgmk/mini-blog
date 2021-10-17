@@ -15,3 +15,17 @@ export const fetchPosts = () => {
         }
     }
 }
+
+export const fetchPost = (id) => {
+    return async (dispatch: Dispatch<PostsAction>) => {
+        try {
+            const response = await axios.get('https://simple-blog-api.crew.red/posts/' + id)
+            // @ts-ignore
+            dispatch({type: PostDetailsActionTypes.FETCH_DETAILS_POST, payload: response.data})
+        } catch (e) {
+            // dispatch({
+            //     type: TrackActionTypes.FETCH_TRACKS_ERROR,
+            //     payload: 'Произошла ошибка при загрузке треков'})
+        }
+    }
+}

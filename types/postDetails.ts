@@ -4,7 +4,9 @@ export interface IOnePost {
 }
 
 export interface IPostDetails {
-    IPost,
+    id: number,
+    title: string,
+    body: string,
     comments?: IComments[]
 }
 
