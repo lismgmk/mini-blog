@@ -14,17 +14,26 @@ import {nanoid} from "nanoid";
 import {useInput} from "../../hooks/useInput";
 
 
+export type resCommentType = {
+    "postId": number,
+    "body": string,
+    "id": number
+}
+
 const BlogPage = ({post}) => {
 
-const postComment = useInput('')
+    const postComment = useInput('')
     const [newComment, setNewComment] = useState(post)
-    const addComment = async ()=>{
+
+    const addComment = async () => {
         try {
-            const response = await axios.post('https://simple-blog-api.crew.red/comments', {
-                "postId": post.id,
-                "body": postComment.value
-            })
-            setNewComment({...post, comments: [...post.comments, response.data]})
+            const response = await axios.post<resCommentType>('https://simple-blog-api.crew.red/comments',
+                {
+                    "postId": newComment.id,
+                    "body": postComment.value
+                })
+            console.log(response.data.body)
+            setNewComment({...newComment, comments: [...newComment.comments, response.data]})
         } catch (e) {
             console.log(e)
         }
@@ -38,8 +47,8 @@ const postComment = useInput('')
                     onClick={() => router.push('/')}>All blogs</Button>
             <Grid container>
                 {/*<img src={post.id} alt='' width={200} height={200}/>*/}
-                    <h1>name blog {post && newComment.title}</h1>
-                <p>{post && newComment.body}</p>
+                <h1>name blog {newComment.title}</h1>
+                <p>{newComment.body}</p>
 
                 <h1>Comments</h1>
                 <Grid container>
@@ -58,10 +67,10 @@ const postComment = useInput('')
                 </Grid>
                 <div>
                     {
-                        newComment.comments && post.comments.map(comment=>
-                        <div key={nanoid()}>
-                            {comment.body}
-                        </div>)
+                        newComment.comments.map(comment =>
+                            <div key={nanoid()}>
+                                {comment.body}
+                            </div>)
                     }
                 </div>
             </Grid>
@@ -73,7 +82,7 @@ const postComment = useInput('')
 export default BlogPage;
 
 export const getServerSideProps: GetServerSideProps = async ({params}) => {
-    const response =  await axios.get('https://simple-blog-api.crew.red/posts/' + params.id)
+    const response = await axios.get('https://simple-blog-api.crew.red/posts/' + params.id + '?_embed=comments')
     return {
         props: {
             post: response.data

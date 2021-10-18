@@ -9,7 +9,7 @@ export const postsReducer = (state = initialState, action: PostsAction): IPosts 
         case PostsActionTypes.FETCH_POSTS:
             return {...state, posts: action.payload}
         case PostsActionTypes.CREATE_POST:
-            return {...state, posts: [...state.posts, action.payload]}
+            return {...state, posts: [action.payload, ...state.posts]}
       case PostsActionTypes.DELETE_POST:
             return {...state, posts: state.posts.filter(i=> i.id !== action.id)}
         case PostsActionTypes.UPDATE_POST:

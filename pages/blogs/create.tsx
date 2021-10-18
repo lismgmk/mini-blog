@@ -3,17 +3,41 @@ import {MainLayout} from "../../layouts/MainLayout";
 import StepWrapper from "../../Components/StepWrapper";
 import {Button, Grid, TextField} from "@mui/material";
 import ImageUpLoad from "../../Components/ImageUpLoad";
+import {useInput} from "../../hooks/useInput";
+import axios from "axios";
+import {useRouter} from "next/router";
+import {useDispatch} from "react-redux";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {useActions} from "../../hooks/useActions";
+import {CreatePost} from "../../store/action-creaters/AllActionCreaters";
+import {createPost} from "../../store/action-creaters/postsThunk";
 
 const Create = () => {
 
     const [image, setImage] = useState('')
+    const title = useInput('')
+    const body = useInput('')
+    const router = useRouter()
+
+const dispatch = useDispatch()
 
     const [activeStep, setActiveStep] = useState(0)
-
+    const data = {
+        'title': title.value,
+        'body': body.value
+    }
     const next = () => {
         if (activeStep !== 2) {
             setActiveStep((prev) => prev + 1)
+        } else {
+            // dispatch(createPost(data))
+
+            axios.post('https://simple-blog-api.crew.red/posts/', data)
+                .then(resp => router.push('/'))
+                .catch(e => console.log(e))
         }
+
+
     }
     const back = () => {
         setActiveStep((prev) => prev - 1)
@@ -26,12 +50,14 @@ const Create = () => {
                 {activeStep === 0 &&
                 <Grid container direction={'column'} style={{padding: 20}}>
                     <TextField
-                    style={{marginTop: 10}}
-                    label={'Author Name'}
+                        style={{marginTop: 10}}
+                        label={'Title'}
+                        {...title}
                     />
                     <TextField
-                    style={{marginTop: 10}}
-                    label={'Theme'}
+                        style={{marginTop: 10}}
+                        label={'Body'}
+                        {...body}
                     />
                 </Grid>
                 }

@@ -1,5 +1,5 @@
 export interface IPosts {
-    posts: IPost[] | null
+    posts: IPost[]
 }
 
 export interface IPost {

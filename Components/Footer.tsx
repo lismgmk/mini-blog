@@ -1,9 +1,7 @@
 import React from "react";
 import {Box, Button, Card, Container, Grid} from "@mui/material";
 import {useRouter} from "next/router";
-import {MainLayout} from "../layouts/MainLayout";
-import {IBlog} from "../types/blog";
-import BlogItem from "./BlogItem";
+
 
 
 const Footer = () => {
